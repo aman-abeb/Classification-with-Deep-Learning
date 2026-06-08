@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+
+# Full dataset — keep locally only
+PlantVillage/
+
+# Generated outputs (keep trained model for deployment)
+outputs/*
+!outputs/best_model.pth
+outputs/gradcam/
+
+project/__pycache__/
