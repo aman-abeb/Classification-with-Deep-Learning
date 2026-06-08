@@ -4,6 +4,8 @@
 
 Multi-class image classification of potato leaves using **ResNet18 transfer learning** on the full **PlantVillage** dataset.
 
+**Live demo:** [https://classification-with-deep-learning.streamlit.app/](https://classification-with-deep-learning.streamlit.app/)
+
 ## Classes
 
 | Folder                  | Disease      |
@@ -63,9 +65,10 @@ pip install -r requirements.txt
 2. Open `potato_disease_classification.ipynb` → **Run All** (section 11 trains a baseline model for a few epochs)
 3. Launch demo: `streamlit run app.py`
 
-## Live demo (Streamlit Community Cloud)
+## Live demo
 
-1. Push this repo to GitHub.
-2. Open [share.streamlit.io](https://share.streamlit.io/) and sign in with GitHub.
-3. Click **New app** → repository `aman-abeb/Classification-with-Deep-Learning`, branch `main`, main file `app.py`.
-4. Deploy. The bundled `samples/` folder and `outputs/best_model.pth` let the demo run without the full PlantVillage dataset.
+The Streamlit app is deployed at:
+
+**https://classification-with-deep-learning.streamlit.app/**
+
+Upload a leaf image or use the sample images to get a prediction with optional Grad-CAM explainability.
