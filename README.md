@@ -4,7 +4,8 @@
 
 Multi-class image classification of potato leaves using **ResNet18 transfer learning** on the full **PlantVillage** dataset.
 
-**Live demo:** [https://classification-with-deep-learning.streamlit.app/](https://classification-with-deep-learning.streamlit.app/)
+**Repository:** [github.com/aman-abeb/Classification-with-Deep-Learning](https://github.com/aman-abeb/Classification-with-Deep-Learning)  
+**Live demo:** [classification-with-deep-learning.streamlit.app](https://classification-with-deep-learning.streamlit.app/)
 
 ## Classes
 
