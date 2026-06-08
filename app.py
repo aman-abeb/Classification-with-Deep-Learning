@@ -115,23 +115,6 @@ def render_gradcam(model, device, image_rgb: np.ndarray, pred_class: str) -> Non
     c2.image(overlay, caption="Grad-CAM overlay", use_container_width=True)
 
 
-def render_sample_gallery(sample_paths: list[tuple[str, str]]) -> None:
-    st.subheader("Sample images")
-    for class_name in CLASS_NAMES:
-        class_samples = [path for cn, path in sample_paths if cn == class_name]
-        if not class_samples:
-            continue
-
-        st.markdown(f"**{DISPLAY_NAMES[class_name]}**")
-        cols = st.columns(min(len(class_samples), 4))
-        for col, path in zip(cols, class_samples):
-            with col:
-                st.image(path, use_container_width=True)
-                if st.button("Use this image", key=f"sample_{path}", use_container_width=True):
-                    st.session_state["selected_sample_path"] = path
-                    st.rerun()
-
-
 def main():
     st.set_page_config(page_title="Potato Disease Classifier", page_icon="🥔", layout="wide")
 
@@ -146,44 +129,31 @@ def main():
         st.error(f"Model not found at `{BEST_MODEL_PATH}`. Run the notebook first.")
         st.stop()
 
-    if "selected_sample_path" not in st.session_state:
-        st.session_state["selected_sample_path"] = None
-
     model, device = load_model(BEST_MODEL_PATH.stat().st_mtime)
     sample_paths = get_sample_image_paths(_samples_dir_mtime())
 
     uploaded = st.file_uploader("Upload a leaf image", type=ALLOWED_TYPES)
     show_gradcam = st.checkbox("Show Grad-CAM explanation", value=True)
 
+    selected_sample: str | None = None
     if sample_paths:
         sample_options = {path: f"{DISPLAY_NAMES[class_name]} — {Path(path).name}" for class_name, path in sample_paths}
-        selectbox_options = ["— choose from gallery or upload —", *sample_options.keys()]
-        default_index = 0
-        if st.session_state["selected_sample_path"] in sample_options:
-            default_index = selectbox_options.index(st.session_state["selected_sample_path"])
-
         selected_sample = st.selectbox(
             "Or pick a sample image",
-            options=selectbox_options,
-            index=default_index,
+            options=["— upload your own —", *sample_options.keys()],
             format_func=lambda value: sample_options.get(value, value),
         )
-        if selected_sample == "— choose from gallery or upload —":
+        if selected_sample == "— upload your own —":
             selected_sample = None
-        else:
-            st.session_state["selected_sample_path"] = selected_sample
-
-        render_sample_gallery(sample_paths)
 
     image_rgb: np.ndarray | None = None
     if uploaded is not None:
         image_rgb = load_image_rgb(uploaded)
-        st.session_state["selected_sample_path"] = None
-    elif st.session_state["selected_sample_path"]:
-        image_rgb = load_image_rgb(st.session_state["selected_sample_path"])
+    elif selected_sample is not None:
+        image_rgb = load_image_rgb(selected_sample)
 
     if image_rgb is None:
-        st.info("Upload an image, pick from the dropdown, or click **Use this image** on a sample above.")
+        st.info("Upload an image or pick a sample from the dropdown.")
         return
 
     try:
