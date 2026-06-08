@@ -10,7 +10,9 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 
-PROJECT_DIR = Path(__file__).resolve().parent / "project"
+PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_DIR = PROJECT_ROOT / "project"
+SAMPLES_DIR = PROJECT_ROOT / "samples"
 sys.path.insert(0, str(PROJECT_DIR))
 
 from dataset import get_eval_transforms  # noqa: E402
@@ -24,7 +26,6 @@ from utils import (  # noqa: E402
     GRADCAM_DIR,
     IMAGE_EXTENSIONS,
     NUM_CLASSES,
-    SAMPLES_DIR,
     get_device,
 )
 
